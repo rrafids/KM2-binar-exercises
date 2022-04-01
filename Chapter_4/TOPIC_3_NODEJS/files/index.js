@@ -1,7 +1,7 @@
 const { getData, createData } = require("./functions/files");
 
 const payload = {
-  name: "lutfi",
+  name: "lkj",
   age: 50,
 };
 
