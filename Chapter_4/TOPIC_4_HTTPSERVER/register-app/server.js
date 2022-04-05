@@ -48,6 +48,15 @@ const onRequest = (req, res) => {
       res.end(user);
 
       break;
+    case "/css/style.css":
+      const cssFile = path.join(PUBLIC_DIRECTORY, "css/style.css");
+      const css = fs.readFileSync(cssFile, "utf8");
+
+      res.setHeader("Content-Type", "text/css");
+      res.writeHead(200);
+      res.end(css);
+
+      break;
     case "/api/users":
       if (req.method === "POST") {
         let body = "";

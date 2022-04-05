@@ -1,5 +1,3 @@
-console.log("app.js");
-
 class App {
   constructor() {
     this.nameInput = document.getElementById("name");
