@@ -59,6 +59,7 @@ const onRequest = (req, res) => {
       break;
     case "/api/users":
       if (req.method === "POST") {
+        // Get payload body
         let body = "";
         req.on("data", (chunk) => {
           body += chunk.toString(); // convert Buffer to string
