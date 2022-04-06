@@ -39,4 +39,26 @@ class User {
       console.log(err);
     }
   }
+
+  async get(query) {
+    const { name } = query;
+
+    try {
+      const response = await fetch(
+        `http://localhost:8082/api/users?name=${name}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const resJson = await response.json(); // sama aja JSON.parse
+      console.log(resJson);
+      return resJson;
+    } catch (err) {
+      console.log(err);
+    }
+  }
 }

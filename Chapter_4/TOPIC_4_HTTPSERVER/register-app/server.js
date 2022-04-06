@@ -8,7 +8,9 @@ const PORT = 8082;
 const PUBLIC_DIRECTORY = path.join(__dirname, "public");
 
 const onRequest = (req, res) => {
-  const url = req.url;
+  const urlRaw = req.url;
+  const url = urlRaw.split("?")[0];
+  const query = urlRaw.split("?")[1];
 
   switch (url) {
     case "/":
@@ -57,6 +59,7 @@ const onRequest = (req, res) => {
       res.end(css);
 
       break;
+    // Setiap URL bisa nerima lebih dari 1 method (get, post, put dll)
     case "/api/users":
       if (req.method === "POST") {
         // Get payload body
@@ -65,13 +68,34 @@ const onRequest = (req, res) => {
           body += chunk.toString(); // convert Buffer to string
         });
         req.on("end", () => {
+          // Update data baru, data lama ga diapus
+          const data = fs.readFileSync("./storage/user.json");
+          let resp = JSON.parse(data);
+          console.log(resp);
+          resp.push(body);
+
           // JSON.stringify => ubah data dari Javascript ke format JSON
-          fs.writeFileSync("./storage/user.json", body);
+          fs.writeFileSync("./storage/user.json", JSON.stringify(resp));
 
           res.setHeader("Content-Type", "application/json");
           res.writeHead(200);
           res.end("Berhasil mendaftarkan user");
         });
+      } else if (req.method === "GET") {
+        const queryValueName = query.split("=")[1];
+        const data = fs.readFileSync("./storage/user.json");
+
+        // JSON.parse => ubah data dari format JSON ke Javascript
+        let resp = JSON.parse(data);
+
+        resp = resp.filter((res) => {
+          res = JSON.parse(res);
+
+          return res.name === queryValueName;
+        });
+        console.log(resp);
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(JSON.stringify(resp));
       }
 
       break;
