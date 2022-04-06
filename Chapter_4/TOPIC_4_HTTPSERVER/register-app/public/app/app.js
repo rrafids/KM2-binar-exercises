@@ -40,7 +40,7 @@ class App {
         };
 
         const getUsers = await user.get(query);
-        console.log(getUsers);
+
         getUsers.map((user) => {
           user = JSON.parse(user);
           console.log(user);

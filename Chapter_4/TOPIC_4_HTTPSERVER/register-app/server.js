@@ -71,7 +71,6 @@ const onRequest = (req, res) => {
           // Update data baru, data lama ga diapus
           const data = fs.readFileSync("./storage/user.json");
           let resp = JSON.parse(data);
-          console.log(resp);
           resp.push(body);
 
           // JSON.stringify => ubah data dari Javascript ke format JSON
@@ -93,7 +92,7 @@ const onRequest = (req, res) => {
 
           return res.name === queryValueName;
         });
-        console.log(resp);
+
         res.writeHead(200, { "Content-Type": "application/json" });
         res.end(JSON.stringify(resp));
       }
