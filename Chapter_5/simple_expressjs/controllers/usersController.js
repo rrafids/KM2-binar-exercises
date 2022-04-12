@@ -12,4 +12,9 @@ const getUserStatus = (req, res) => {
   res.send("Selamat kamu admin, jadi bisa masuk");
 };
 
+const registerUser = (req, res) => {
+  // 1. Ngecek email existence
+  // 2. Store data ke database
+}
+
 module.exports = { getUsers, getUserById, getUserStatus };
