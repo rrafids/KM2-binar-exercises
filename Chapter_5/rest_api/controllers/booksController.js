@@ -12,7 +12,10 @@ const create = async (req, res) => {
 
   const createdBook = await booksService.create({ title, author, price });
 
-  res.status(201).send(createdBook);
+  res.status(201).send({
+    message: "Berhasil membuat buku baru",
+    created_book: createdBook,
+  });
 };
 
 module.exports = { getAll, create };

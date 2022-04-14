@@ -13,6 +13,7 @@ const { authenticate } = require("./middlewares/authentication");
 // Define Routes
 app.get("/books", booksController.getAll);
 app.post("/books", authenticate, booksController.create);
+app.post("/login", booksController.create);
 
 app.listen(PORT, () => {
   console.log(`Server berhasil berjalan di port http://localhost:${PORT}`);
