@@ -1,11 +1,17 @@
 const usersRepository = require("../repositories/usersRepository");
+const postsRepository = require("../repositories/postsRepository");
 
 class UsersService {
   static async getAll() {
-    // Manggil repo get all books
     const getUsers = await usersRepository.getAll();
 
     return getUsers;
+  }
+
+  static async getByUserId({ id }) {
+    const getPosts = await postsRepository.getByUserId({ user_id: id });
+
+    return getPosts;
   }
 
   static async create({ name, email }) {

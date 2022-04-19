@@ -7,6 +7,14 @@ const getAll = async (req, res) => {
   res.send(getUsers);
 };
 
+const getByUserId = async (req, res) => {
+  const { id } = req.params;
+  // Manggil Service Get Books
+  const getPosts = await usersService.getByUserId({ id });
+
+  res.send(getPosts);
+};
+
 const create = async (req, res) => {
   const { name, email } = req.body;
 
@@ -18,4 +26,4 @@ const create = async (req, res) => {
   });
 };
 
-module.exports = { getAll, create };
+module.exports = { getAll, create, getByUserId };

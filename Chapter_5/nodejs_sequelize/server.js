@@ -9,6 +9,7 @@ const usersController = require("./controllers/usersController");
 
 // Define Routes
 app.get("/users", usersController.getAll);
+app.get("/users/:id/posts", usersController.getByUserId);
 app.post("/users", usersController.create);
 
 app.listen(PORT, () => {
