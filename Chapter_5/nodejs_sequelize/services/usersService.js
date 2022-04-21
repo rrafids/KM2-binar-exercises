@@ -2,8 +2,8 @@ const usersRepository = require("../repositories/usersRepository");
 const postsRepository = require("../repositories/postsRepository");
 
 class UsersService {
-  static async getAll() {
-    const getUsers = await usersRepository.getAll();
+  static async getAll({ name }) {
+    const getUsers = await usersRepository.getAll({ name });
 
     return getUsers;
   }

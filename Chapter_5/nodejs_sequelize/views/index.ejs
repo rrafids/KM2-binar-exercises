@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Beranda</title>
+  </head>
+  <body>
+    <h1>List User</h1>
+
+    <div style="margin-bottom: 20px">
+      <input id="search" placeholder="Masukkan nama" />
+      <button onclick="search()">Cari</button>
+    </div>
+
+    <% users.map((user) => { %>
+    <div style="border: 2px solid black; padding: 10px; font-size: 10px">
+      <h1>Nama user: <%= user.name %></h1>
+      <h1>Email user: <%= user.email %></h1>
+    </div>
+    <% }) %>
+
+    <form action="http://localhost:2000/users" method="post">
+      <h1>Tambah User</h1>
+      <select name="size">
+        <option value="small">Small</option>
+        <option value="big">Big</option>
+      </select>
+      <input name="name" placeholder="Masukkan nama" />
+      <input name="email" placeholder="Masukkan email" />
+      <button type="submit">Register</button>
+    </form>
+  </body>
+
+  <script>
+    function search() {
+      const searchName = document.getElementById("search").value;
+
+      window.location.href = `/register?name=${searchName}`;
+    }
+
+    // Contoh Mapping di JS
+    const users = [
+      { name: "krisna", age: 34 },
+      {
+        name: "rio",
+        age: 99,
+      },
+    ];
+
+    users.map((user) => {
+      console.log("nama: ", user.name);
+      console.log("umur: ", user.age);
+    });
+  </script>
+</html>
