@@ -1,4 +1,4 @@
-const { User } = require("../models");
+const { User, Post } = require("../models");
 
 class UsersRepository {
   static async getByEmail({ email }) {
@@ -15,6 +15,12 @@ class UsersRepository {
     });
 
     return createdUser;
+  }
+
+  static async getPostsByID({ id }) {
+    const getPosts = await Post.findAll({ where: { user_id: id } });
+
+    return getPosts;
   }
 }
 
