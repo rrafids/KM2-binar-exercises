@@ -1,10 +1,11 @@
 const jwt = require("jsonwebtoken");
 const { JWT } = require("../lib/const");
 const usersRepository = require("../repositories/usersRepository");
+const { ROLES } = require("../lib/const");
 
 const authenticate = async (req, res, next) => {
   const authHeader = req.get("Authorization");
-
+  console.log(authHeader);
   let token = "";
 
   if (authHeader && authHeader.startsWith("Bearer"))
@@ -24,6 +25,8 @@ const authenticate = async (req, res, next) => {
     req.user = getUser;
 
     next();
+
+    return;
   } catch (err) {
     return res.status(401).send({
       status: false,
@@ -33,4 +36,16 @@ const authenticate = async (req, res, next) => {
   }
 };
 
-module.exports = { authenticate };
+const isAdmin = async (req, res, next) => {
+  const user = req.user;
+
+  if (user.role === ROLES.ADMIN) return next();
+
+  return res.status(401).send({
+    status: false,
+    message: "Akun anda harus admin untuk mengakses resource ini.",
+    data: null,
+  });
+};
+
+module.exports = { authenticate, isAdmin };

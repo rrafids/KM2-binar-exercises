@@ -1,0 +1,158 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Instagram API",
+    "description": "Instagram API Clone DOCS",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "host": "localhost:2000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "API for authentication"
+    },
+    {
+      "name": "User",
+      "description": "API for managing users data"
+    }
+  ],
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/auth/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Register Endpoint",
+        "parameters": [
+          {
+            "name": "register",
+            "in": "body",
+            "description": "User to register.",
+            "schema": {
+              "$ref": "#/definitions/Register"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Success registering user.",
+            "schema": {
+              "$ref": "#/definitions/Users"
+            }
+          }
+        }
+      }
+    },
+    "/users/{id}": {
+      "delete": {
+        "tags": ["User"],
+        "summary": "Delete User Endpoint",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of user that we want to delete",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success deleting user."
+          }
+        }
+      },
+      "put": {
+        "tags": ["User"],
+        "summary": "Update User Endpoint (Example)",
+        "security": [{ "Bearer": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "ID of user that we want to delete",
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success deleting user."
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Register": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        }
+      }
+    },
+    "User": {
+      "required": ["name", "_id", "companies"],
+      "properties": {
+        "_id": {
+          "type": "integer",
+          "uniqueItems": true
+        },
+        "isPublic": {
+          "type": "boolean"
+        },
+        "name": {
+          "type": "string"
+        },
+        "books": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "amount": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "companies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Users": {
+      "type": "array",
+      "$ref": "#/definitions/User"
+    }
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header",
+      "description": "Enter your bearer token in the format **Bearer &lt;token>**"
+    }
+  }
+}
