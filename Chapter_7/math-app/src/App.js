@@ -1,27 +1,27 @@
 import logo from "./logo.svg";
 import "./App.css";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
 function App() {
+  const [renderCount, setRenderCount] = useState(0);
   const [count, setCount] = useState(0);
 
   // Using REF
-  const value = useRef(0);
+  const valueOne = useRef(0);
+  const valueTwo = useRef(0);
 
-  const onInputChange = () => {
-    setCount(value.current.value);
+  const sumValue = () => {
+    if (valueOne.current.value && valueTwo.current.value) {
+      const valueOneInt = parseInt(valueOne.current.value);
+      const valueTwoInt = parseInt(valueTwo.current.value);
+      const sum = valueOneInt + valueTwoInt;
+
+      setCount(sum);
+    }
   };
-  // Using REF
 
-  // Using STATE
-  // const onInputStateChange =(e)  => {
-  //   // Update state count
-  //   const value = e.target.value;
-
-  //   setCount(value);
-  // };
-  // Using STATE
+  useEffect(() => setRenderCount(renderCount + 1), [count]);
 
   return (
     <div className="App">
@@ -31,17 +31,18 @@ function App() {
           Edit <code>src/App.js</code> and save to reload.
         </p>
         <input
+          placeholder="Value One"
           type="number"
-          // Using REF
-          ref={value}
-          onChange={onInputChange}
-          // Using REF
-
-          // Using STATE
-          // onChange={(e) => onInputStateChange(e)}
-          // Using STATE
+          ref={valueOne}
         />
+        <input
+          placeholder="Value Two"
+          type="number"
+          ref={valueTwo}
+        />
+        <button onClick={sumValue}>Sum</button>
         <h1>{count}</h1>
+        <h1>Render count: {renderCount}</h1>
       </header>
     </div>
   );
