@@ -2,12 +2,14 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
+const cors = require("cors");
 
 const app = express();
 const PORT = 2000;
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cors());
 
 // Import Controllers
 const authController = require("./controllers/authController");
