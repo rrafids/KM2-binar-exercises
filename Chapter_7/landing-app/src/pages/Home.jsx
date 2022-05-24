@@ -2,8 +2,11 @@ import { Link, Navigate } from "react-router-dom";
 import { Button, Alert } from "react-bootstrap";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { addUser } from "../slices/userSlice";
 
 function Home() {
+  const dispatch = useDispatch();
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [user, setUser] = useState({});
 
@@ -27,6 +30,14 @@ function Home() {
         const currentUserResponse = currentUserRequest.data;
 
         if (currentUserResponse.status) {
+          // Set user data to redux state
+          dispatch(
+            addUser({
+              user: currentUserResponse.data.user,
+              token: token,
+            })
+          );
+
           setUser(currentUserResponse.data.user);
         }
       } catch (err) {
