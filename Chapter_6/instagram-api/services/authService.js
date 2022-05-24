@@ -1,8 +1,9 @@
 const usersRepository = require("../repositories/usersRepository");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { OAuth2Client } = require("google-auth-library");
+
 const { JWT } = require("../lib/const");
-const axios = require("axios");
 
 const SALT_ROUND = 10;
 
@@ -140,6 +141,17 @@ class AuthService {
 
       const getUser = await usersRepository.getByEmail({ email });
 
+      if (!getUser.password) {
+        return {
+          status: false,
+          status_code: 400,
+          message: "Akun ini belum melakukan setup password.",
+          data: {
+            user: null,
+          },
+        };
+      }
+
       if (!getUser) {
         return {
           status: false,
@@ -200,16 +212,18 @@ class AuthService {
 
   static async loginGoogle({ google_credential: googleCredential }) {
     try {
-      const options = {
-        headers: { Authorization: `Bearer ${googleCredential}` },
-      };
-
       // Get google user credential
-      const response = await axios.get(
-        `https://www.googleapis.com/oauth2/v2/userinfo`,
-        options
+      const client = new OAuth2Client(
+        "52535015285-vv5u8k47qdcv43sv1fe5jehug7m35gb4.apps.googleusercontent.com"
       );
-      const { email, name } = response.data;
+
+      const userInfo = await client.verifyIdToken({
+        idToken: googleCredential,
+        audience:
+          "52535015285-vv5u8k47qdcv43sv1fe5jehug7m35gb4.apps.googleusercontent.com",
+      });
+
+      const { email, name } = userInfo.payload;
 
       const getUserByEmail = await usersRepository.getByEmail({ email });
 
@@ -223,8 +237,8 @@ class AuthService {
 
       const token = jwt.sign(
         {
-          id: getUser.id,
-          email: getUser.email,
+          id: getUserByEmail.id,
+          email: getUserByEmail.email,
         },
         JWT.SECRET,
         {
@@ -241,7 +255,6 @@ class AuthService {
         },
       };
     } catch (err) {
-      console.log(err);
       return {
         status: false,
         status_code: 500,

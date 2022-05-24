@@ -49,7 +49,6 @@ export default function Login() {
   };
 
   const onLoginGoogleSuccess = async (credentialResponse) => {
-    console.log(credentialResponse);
     try {
       const userToLoginPayload = {
         google_credential: credentialResponse.credential,
