@@ -2,6 +2,8 @@ import { useRef, useState } from "react";
 import { Form, Container, Button, Alert } from "react-bootstrap";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -46,6 +48,10 @@ export default function Login() {
     }
   };
 
+  const onLoginGoogleSuccess = (credentialResponse) => {
+    console.log(credentialResponse);
+  };
+
   return (
     <Container className="my-5">
       <h1 className="mb-3">Masuk</h1>
@@ -66,6 +72,16 @@ export default function Login() {
             placeholder="Masukkan Password"
           />
         </Form.Group>
+        <div className="my-3">
+          <GoogleOAuthProvider clientId="--your-client-id--">
+            <GoogleLogin
+              onSuccess={onLoginGoogleSuccess}
+              onError={() => {
+                console.log("Login Failed");
+              }}
+            />
+          </GoogleOAuthProvider>
+        </div>
         <p>
           Belum punya akun? Silakan <Link to="/register">Daftar</Link>
         </p>
@@ -73,7 +89,7 @@ export default function Login() {
           <Alert variant="danger">{errorResponse.message}</Alert>
         )}
         <Button className="w-100" type="submit">
-          Daftar
+          Masuk
         </Button>
       </Form>
     </Container>
