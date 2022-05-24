@@ -2,6 +2,7 @@ const usersRepository = require("../repositories/usersRepository");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const { JWT } = require("../lib/const");
+const axios = require("axios");
 
 const SALT_ROUND = 10;
 
@@ -79,7 +80,7 @@ class AuthService {
           name,
           email,
           password: hashedPassword,
-          role
+          role,
         });
 
         return {
@@ -186,6 +187,61 @@ class AuthService {
         }
       }
     } catch (err) {
+      return {
+        status: false,
+        status_code: 500,
+        message: err.message,
+        data: {
+          registered_user: null,
+        },
+      };
+    }
+  }
+
+  static async loginGoogle({ google_credential: googleCredential }) {
+    try {
+      const options = {
+        headers: { Authorization: `Bearer ${googleCredential}` },
+      };
+
+      // Get google user credential
+      const response = await axios.get(
+        `https://www.googleapis.com/oauth2/v2/userinfo`,
+        options
+      );
+      const { email, name } = response.data;
+
+      const getUserByEmail = await usersRepository.getByEmail({ email });
+
+      if (!getUserByEmail) {
+        await usersRepository.create({
+          name,
+          email,
+          role: "user",
+        });
+      }
+
+      const token = jwt.sign(
+        {
+          id: getUser.id,
+          email: getUser.email,
+        },
+        JWT.SECRET,
+        {
+          expiresIn: JWT.EXPIRED,
+        }
+      );
+
+      return {
+        status: true,
+        status_code: 200,
+        message: "User berhasil login",
+        data: {
+          token,
+        },
+      };
+    } catch (err) {
+      console.log(err);
       return {
         status: false,
         status_code: 500,

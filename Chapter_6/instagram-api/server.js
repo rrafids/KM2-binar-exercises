@@ -25,6 +25,8 @@ app.post("/auth/register", authController.register);
 app.post("/auth/login", authController.login);
 app.get("/auth/me", middleware.authenticate, authController.currentUser);
 
+app.post("/auth/login-google", authController.loginGoogle);
+
 // Posts
 app.post("/posts", middleware.authenticate, postsController.create);
 app.delete("/posts/:id", middleware.authenticate, postsController.deleteByID);

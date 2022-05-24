@@ -44,4 +44,18 @@ const login = async (req, res) => {
   });
 };
 
-module.exports = { register, login, currentUser };
+const loginGoogle = async (req, res) => {
+  const { google_credential } = req.body;
+
+  const { status, status_code, message, data } = await authService.loginGoogle({
+    google_credential,
+  });
+
+  res.status(status_code).send({
+    status: status,
+    message: message,
+    data: data,
+  });
+};
+
+module.exports = { register, login, loginGoogle, currentUser };

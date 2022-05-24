@@ -48,8 +48,28 @@ export default function Login() {
     }
   };
 
-  const onLoginGoogleSuccess = (credentialResponse) => {
+  const onLoginGoogleSuccess = async (credentialResponse) => {
     console.log(credentialResponse);
+    try {
+      const userToLoginPayload = {
+        google_credential: credentialResponse.credential,
+      };
+
+      const loginGoogleRequest = await axios.post(
+        "http://localhost:2000/auth/login-google",
+        userToLoginPayload
+      );
+
+      const loginGoogleResponse = loginGoogleRequest.data;
+
+      if (loginGoogleResponse.status) {
+        localStorage.setItem("token", loginGoogleResponse.data.token);
+
+        navigate("/");
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -73,7 +93,7 @@ export default function Login() {
           />
         </Form.Group>
         <div className="my-3">
-          <GoogleOAuthProvider clientId="--your-client-id--">
+          <GoogleOAuthProvider clientId="52535015285-vv5u8k47qdcv43sv1fe5jehug7m35gb4.apps.googleusercontent.com">
             <GoogleLogin
               onSuccess={onLoginGoogleSuccess}
               onError={() => {
