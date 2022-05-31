@@ -3,6 +3,8 @@ const bodyParser = require("body-parser");
 const swaggerUi = require("swagger-ui-express");
 const swaggerDocument = require("./swagger.json");
 const cors = require("cors");
+const path = require("path");
+const upload = require("./utils/fileUpload");
 
 const app = express();
 const PORT = 2000;
@@ -21,7 +23,7 @@ const middleware = require("./middlewares/auth");
 
 // Define Routes
 // Auth
-app.post("/auth/register", authController.register);
+app.post("/auth/register", upload.single("picture"), authController.register);
 app.post("/auth/login", authController.login);
 app.get("/auth/me", middleware.authenticate, authController.currentUser);
 
@@ -42,6 +44,9 @@ app.delete(
 
 // API Documentation
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+// Public File Access
+app.use("/public/files", express.static(path.join(__dirname, "/storages")));
 
 app.listen(PORT, () => {
   console.log(`Server berhasil berjalan di port http://localhost:${PORT}`);

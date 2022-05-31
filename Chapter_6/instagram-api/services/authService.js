@@ -8,7 +8,7 @@ const { JWT } = require("../lib/const");
 const SALT_ROUND = 10;
 
 class AuthService {
-  static async register({ name, email, password, role }) {
+  static async register({ name, email, password, role, picture }) {
     try {
       // Payload Validation
       if (!name) {
@@ -38,6 +38,17 @@ class AuthService {
           status: false,
           status_code: 400,
           message: "Email wajib diisi",
+          data: {
+            registered_user: null,
+          },
+        };
+      }
+
+      if (!picture) {
+        return {
+          status: false,
+          status_code: 400,
+          message: "Gambar wajib diisi",
           data: {
             registered_user: null,
           },
@@ -82,6 +93,7 @@ class AuthService {
           email,
           password: hashedPassword,
           role,
+          picture,
         });
 
         return {

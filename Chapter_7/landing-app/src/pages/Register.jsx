@@ -10,6 +10,7 @@ export default function Register() {
   const emailField = useRef("");
   const roleField = useRef("");
   const passwordField = useRef("");
+  const [pictureField, setPictureField] = useState();
 
   const [errorResponse, setErrorResponse] = useState({
     isError: false,
@@ -20,16 +21,22 @@ export default function Register() {
     e.preventDefault();
 
     try {
-      const userToRegisterPayload = {
-        name: nameField.current.value,
-        email: emailField.current.value,
-        role: roleField.current.value,
-        password: passwordField.current.value,
-      };
+      const userToRegisterPayload = new FormData();
+
+      userToRegisterPayload.append("name", nameField.current.value);
+      userToRegisterPayload.append("email", emailField.current.value);
+      userToRegisterPayload.append("role", roleField.current.value);
+      userToRegisterPayload.append("password", passwordField.current.value);
+      userToRegisterPayload.append("picture", pictureField);
 
       const registerRequest = await axios.post(
         "http://localhost:2000/auth/register",
-        userToRegisterPayload
+        userToRegisterPayload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
 
       const registerResponse = registerRequest.data;
@@ -80,6 +87,13 @@ export default function Register() {
             type="password"
             ref={passwordField}
             placeholder="Masukkan Password"
+          />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>Picture</Form.Label>
+          <Form.Control
+            type="file"
+            onChange={(e) => setPictureField(e.target.files[0])}
           />
         </Form.Group>
         <p>

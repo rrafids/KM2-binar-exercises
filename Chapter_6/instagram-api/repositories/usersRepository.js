@@ -13,12 +13,13 @@ class UsersRepository {
     return getUser;
   }
 
-  static async create({ name, email, password, role }) {
+  static async create({ name, email, password, role, picture }) {
     const createdUser = User.create({
       name,
       email,
       password,
       role,
+      picture
     });
 
     return createdUser;

@@ -8,6 +8,7 @@ const register = async (req, res) => {
     email,
     password,
     role,
+    picture: req.uploaded_picture,
   });
 
   res.status(status_code).send({
