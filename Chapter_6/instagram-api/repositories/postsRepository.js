@@ -18,13 +18,13 @@ class PostsRepository {
   }
 
   static async deleteByID({ id }) {
-    const deletePost = await Post.destroy({ where: { id } });
+    const deletedPost = await Post.destroy({ where: { id } });
 
-    return deletePost;
+    return deletedPost;
   }
 
   static async updateByID({ id, title, description }) {
-    const deletePost = await Post.update(
+    const updatedPost = await Post.update(
       {
         title,
         description,
@@ -32,7 +32,7 @@ class PostsRepository {
       { where: { id } }
     );
 
-    return deletePost;
+    return updatedPost;
   }
 }
 
